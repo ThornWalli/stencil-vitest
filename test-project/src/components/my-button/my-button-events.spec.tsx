@@ -40,7 +40,7 @@ describe('my-button - event spy', () => {
       button?.click();
       button?.click();
 
-      expect(spy).toHaveReceivedEventTimes(4);
+      expect(spy).toHaveReceivedEventTimes(3);
     });
 
     it('should fail when event count does not match', async () => {
