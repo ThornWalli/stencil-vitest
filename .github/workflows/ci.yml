@@ -78,8 +78,7 @@ jobs:
         run: pnpm install
 
       - name: Build module
-        run: pnpm build
-        run: pnpm install
+        run: pnpm build && pnpm install
 
       - name: Test examples
         run: pnpm test
