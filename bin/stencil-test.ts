@@ -355,7 +355,10 @@ function handleStencilOutput(data: Buffer) {
   }
 }
 
-function cleanup() {
+/**
+ * Clean up child processes and optionally exit with code.
+ */
+function cleanup(exitCode?: number) {
   log('Shutting down...');
 
   if (debounceTimer) {
@@ -372,13 +375,14 @@ function cleanup() {
     stencilProcess = null;
   }
 
-  process.exit(0);
+  if (typeof exitCode === 'number') {
+    process.exit(exitCode);
+  }
 }
 
 // Set up signal handlers for clean shutdown
-process.on('SIGINT', cleanup);
-process.on('SIGTERM', cleanup);
-process.on('exit', cleanup);
+process.on('SIGINT', () => cleanup());
+process.on('SIGTERM', () => cleanup());
 
 // Build Stencil arguments
 const stencilArgs = ['stencil', 'build'];
@@ -439,7 +443,7 @@ stencilProcess.on('exit', (code) => {
   } else {
     // In watch mode, stencil shouldn't exit - if it does, something went wrong
     log(`Stencil exited unexpectedly with code ${code}`);
-    cleanup();
+    cleanup(code || 1);
   }
 });
 
