@@ -22,6 +22,6 @@
     "testing"
   ],
   "dependencies": {
-    "@stenciljs/vitest": "latest"
+    "@stenciljs/vitest": "workspace:*"
   }
 }

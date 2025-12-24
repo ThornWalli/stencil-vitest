@@ -26,7 +26,7 @@ export async function render<T extends HTMLElement = HTMLElement>(
   });
   if (options.clearStage) {
     // Clear existing stage containers
-    const existingStages = document.querySelectorAll('div');
+    const existingStages = document.body.querySelectorAll('div');
     existingStages.forEach((stage) => stage.remove());
   }
   document.body.appendChild(container);
@@ -91,9 +91,7 @@ export async function render<T extends HTMLElement = HTMLElement>(
   };
 
   const unmount = () => {
-    if (container.parentElement) {
-      container.parentElement.removeChild(container);
-    }
+    container.remove();
   };
 
   const spyOnEvent = (eventName: string): EventSpy => {

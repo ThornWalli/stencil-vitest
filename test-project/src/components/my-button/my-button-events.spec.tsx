@@ -19,7 +19,6 @@ describe('my-button - event spy', () => {
     });
 
     it('should fail when no events have been received', async () => {
-      
       const { spyOnEvent } = await render(<my-button>Click me</my-button>);
       const spy = spyOnEvent('buttonClick');
 

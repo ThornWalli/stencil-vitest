@@ -39,6 +39,10 @@
     "./vitest": {
       "types": "./dist/environments/stencil.d.ts",
       "import": "./dist/environments/stencil.js"
+    },
+    "./environments/stencil": {
+      "types": "./dist/environments/stencil.d.ts",
+      "import": "./dist/environments/stencil.js"
     }
   },
   "files": [
@@ -93,12 +97,12 @@
     },
     "@vitest/browser-preview": {
       "optional": true
-    } 
+    }
   },
   "dependencies": {
     "jiti": "^2.6.1",
     "local-pkg": "^1.1.2",
-    "vitest-environment-stencil": "latest"
+    "vitest-environment-stencil": "workspace:*"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

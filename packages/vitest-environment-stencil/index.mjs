@@ -1,1 +1,1 @@
-export { default } from '@stenciljs/vitest/vitest';
+export { default } from '@stenciljs/vitest/environments/stencil';

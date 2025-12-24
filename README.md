@@ -43,7 +43,7 @@ export default defineVitestConfig({
           include: ['src/**/*.spec.{ts,tsx}'],
           environment: 'stencil',
           setupFiles: ['./vitest-setup.ts'],
-          
+
           // Optional environment options
 
           // environmentOptions: {
@@ -54,7 +54,7 @@ export default defineVitestConfig({
           // },
         },
       },
-      // Browser tests 
+      // Browser tests
       {
         test: {
           name: 'browser',
@@ -75,12 +75,12 @@ export default defineVitestConfig({
 
 [refer Vitest documentation for all configuration options](https://vitest.dev/config/)
 
-### 3. Load your components 
+### 3. Load your components
 
 ```typescript
 // vitest-setup.ts
 
-// Load Stencil components. 
+// Load Stencil components.
 // Adjust according to your build output of choice *
 await import('./dist/test-components/test-components.esm.js');
 
@@ -111,7 +111,7 @@ describe('my-button', () => {
         </mock:shadow-root>
         Small
       </my-button>
-    `);;
+    `);
   });
 });
 ```
@@ -142,7 +142,7 @@ Render a component for testing.
 ```tsx
 import { render, h } from '@stenciljs/vitest';
 
-const { root, waitForChanges, setProps } = await render(<my-component name="World" />);
+const { root, waitForChanges, setProps, unmount } = await render(<my-component name="World" />);
 
 // Access the element
 expect(root.textContent).toContain('World');
@@ -152,6 +152,9 @@ root.name = 'Stencil';
 await waitForChanges();
 // or
 await setProps({ name: 'Stencil' });
+
+// Unmount component
+unmount();
 ```
 
 ### Available matchers:
