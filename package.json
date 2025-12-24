@@ -106,7 +106,7 @@
   "dependencies": {
     "jiti": "^2.6.1",
     "local-pkg": "^1.1.2",
-    "vitest-environment-stencil": "workspace:*"
+    "vitest-environment-stencil": "latest"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

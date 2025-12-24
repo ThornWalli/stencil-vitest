@@ -1,2 +1,3 @@
-export { default } from '@stenciljs/vitest/vitest';
-export type { StencilEnvironmentOptions } from '@stenciljs/vitest/vitest';
+export { default } from '@stenciljs/vitest/environments/stencil';
+export type { StencilEnvironmentOptions } from '@stenciljs/vitest/environments/stencil';
+  
