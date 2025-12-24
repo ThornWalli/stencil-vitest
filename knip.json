@@ -11,7 +11,8 @@
         "bin/stencil-test.ts"
       ],
       "ignore": ["test-project/**", "dist/**", "**/snapshot-serializer.ts", "**/matchers.ts", "**/html-serializer.ts"],
-      "ignoreDependencies": ["vitest-environment-stencil"]
+      "ignoreDependencies": ["vitest-environment-stencil"],
+      "ignoreBinaries": ["playwright"]
     }
   }
 }
