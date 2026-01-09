@@ -17,12 +17,19 @@ on:
         default: false
         type: boolean
       npm_tag:
-        description: 'NPM dist tag (dev releases only, e.g., dev, next, alpha, beta, nightly)'
+        description: 'NPM dist tag (dev releases only, also used as version suffix)'
         required: false
-        type: string
         default: 'dev'
+        type: choice
+        options:
+          - dev
+          - next
+          - alpha
+          - beta
+          - canary
+          - nightly
       custom_npm_tag:
-        description: 'Custom NPM tag (dev releases only, overrides above, e.g., v4.1.x)'
+        description: 'Custom NPM tag (dev releases only, overrides selection above, e.g., v4.1.x)'
         required: false
         type: string
 
