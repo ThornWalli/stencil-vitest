@@ -70,8 +70,8 @@ importers:
   packages/vitest-environment-stencil:
     dependencies:
       '@stencil/vitest':
-        specifier: workspace:*
-        version: link:../..
+        specifier: latest
+        version: 0.0.1(@stencil/core@4.40.1)(@vitest/browser-playwright@4.0.16)(happy-dom@20.0.11)(jsdom@27.3.0)(playwright@1.57.0)(vitest@4.0.16)
 
   test-project:
     dependencies:
@@ -869,6 +869,39 @@ packages:
     resolution: {integrity: sha512-cTHBvYFLf4h61TVHLibZoJcomYAoC+TNW3oi1VHcZMpWQyp/h/pHG1XQeEpzuSscQc/SJJwOYb5IvQ8vVeeCNg==}
     engines: {node: '>=16.0.0', npm: '>=7.10.0'}
     hasBin: true
+
+  '@stencil/vitest@0.0.1':
+    resolution: {integrity: sha512-zYEksH+2ARh9UuY6N1+2OT6N1uZ6wuj4zpQynl0Kwk6vasgC+C1ZuTNG6vs8hHrvv+x5aYZkQLP3rnP2OKBOMw==}
+    engines: {node: ^20.0.0 || ^22.0.0 || >=24.0.0}
+    hasBin: true
+    peerDependencies:
+      '@playwright/test': '*'
+      '@stencil/core': ^4.0.0
+      '@vitest/browser-playwright': '*'
+      '@vitest/browser-preview': '*'
+      '@vitest/browser-webdriverio': '*'
+      '@wdio/globals': '*'
+      happy-dom: '*'
+      jsdom: '*'
+      playwright: '*'
+      vitest: ^4.0.0 || ^3.0.0 || ^2.0.0
+    peerDependenciesMeta:
+      '@playwright/test':
+        optional: true
+      '@vitest/browser-playwright':
+        optional: true
+      '@vitest/browser-preview':
+        optional: true
+      '@vitest/browser-webdriverio':
+        optional: true
+      '@wdio/globals':
+        optional: true
+      happy-dom:
+        optional: true
+      jsdom:
+        optional: true
+      playwright:
+        optional: true
 
   '@tybys/wasm-util@0.10.1':
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
@@ -3522,6 +3555,19 @@ snapshots:
       '@rollup/rollup-linux-x64-musl': 4.34.9
       '@rollup/rollup-win32-arm64-msvc': 4.34.9
       '@rollup/rollup-win32-x64-msvc': 4.34.9
+
+  '@stencil/vitest@0.0.1(@stencil/core@4.40.1)(@vitest/browser-playwright@4.0.16)(happy-dom@20.0.11)(jsdom@27.3.0)(playwright@1.57.0)(vitest@4.0.16)':
+    dependencies:
+      '@stencil/core': 4.40.1
+      jiti: 2.6.1
+      local-pkg: 1.1.2
+      vitest: 4.0.16(@types/node@24.10.4)(@vitest/browser-playwright@4.0.16)(happy-dom@20.0.11)(jiti@2.6.1)(jsdom@27.3.0)
+      vitest-environment-stencil: 0.1.0(@stencil/core@4.40.1)(@vitest/browser-playwright@4.0.16)(happy-dom@20.0.11)(jsdom@27.3.0)(vitest@4.0.16)
+    optionalDependencies:
+      '@vitest/browser-playwright': 4.0.16(playwright@1.57.0)(vite@7.3.0(@types/node@24.10.4)(jiti@2.6.1))(vitest@4.0.16)
+      happy-dom: 20.0.11
+      jsdom: 27.3.0
+      playwright: 1.57.0
 
   '@tybys/wasm-util@0.10.1':
     dependencies:
