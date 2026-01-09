@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       npm_tag:
-        description: 'NPM dist tag'
+        description: 'NPM dist tag (also used as version suffix)'
         required: true
         default: 'dev'
         type: choice
@@ -19,18 +19,6 @@ on:
         description: 'Custom NPM tag (overrides selection above, e.g., v4.1.x)'
         required: false
         type: string
-      version_suffix:
-        description: 'Version suffix'
-        required: true
-        default: 'dev'
-        type: choice
-        options:
-          - dev
-          - nightly
-          - alpha
-          - beta
-          - canary
-          - next
 
 permissions: {}
 
@@ -40,5 +28,5 @@ jobs:
     uses: ./.github/workflows/release.yml
     with:
       npm_tag: ${{ inputs.custom_npm_tag || inputs.npm_tag }}
-      version_suffix: ${{ inputs.version_suffix }}
+      version_suffix: ${{ inputs.custom_npm_tag || inputs.npm_tag }}
     secrets: inherit
