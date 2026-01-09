@@ -91,12 +91,12 @@ For testing unreleased features, you can publish development versions with custo
 
 1. Go to **Actions** → **Dev Release** workflow
 2. Click **Run workflow**
-3. Configure:
-   - **Branch** - Which branch to publish from (main, dev, next)
+3. Select the branch to publish from using the **"Use workflow from"** dropdown
+4. Configure inputs:
    - **NPM tag** - Distribution tag (dev, next, alpha, beta, nightly, canary)
    - **Custom NPM tag** - Optional custom tag like `v4.1.x` (overrides selection above)
    - **Version suffix** - Suffix for the version string (dev, nightly, alpha, etc.)
-4. Click **Run workflow**
+5. Click **Run workflow**
 
 **What happens:**
 - Builds from the selected branch

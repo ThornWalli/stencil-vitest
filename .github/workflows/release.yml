@@ -13,10 +13,6 @@ on:
   # Reusable workflow for dev/nightly releases
   workflow_call:
     inputs:
-      branch:
-        description: 'Branch to release from'
-        required: true
-        type: string
       npm_tag:
         description: 'NPM dist tag (e.g., dev, next, alpha, beta, or version number)'
         required: true
@@ -110,7 +106,6 @@ jobs:
       - name: 🔍 Checkout repository
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
-          ref: ${{ inputs.branch }}
           fetch-depth: 0
 
       - name: 🔧 Setup environment
@@ -180,7 +175,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- **Version:** \`${{ steps.version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **NPM Tag:** \`${{ inputs.npm_tag }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "- **Branch:** \`${{ inputs.branch }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Install with:" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY

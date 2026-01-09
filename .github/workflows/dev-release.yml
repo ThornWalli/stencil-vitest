@@ -3,15 +3,6 @@ name: Dev Release
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch to release from'
-        required: true
-        default: 'main'
-        type: choice
-        options:
-          - main
-          - dev
-          - next
       npm_tag:
         description: 'NPM dist tag'
         required: true
@@ -48,7 +39,6 @@ jobs:
     name: Trigger Dev Release
     uses: ./.github/workflows/release.yml
     with:
-      branch: ${{ inputs.branch }}
       npm_tag: ${{ inputs.custom_npm_tag || inputs.npm_tag }}
       version_suffix: ${{ inputs.version_suffix }}
     secrets: inherit
