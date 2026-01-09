@@ -59,6 +59,74 @@ We follow [Conventional Commits](https://www.conventionalcommits.org/):
 - `refactor:` - Code refactoring
 - `test:` - Test updates
 
+## Release Process
+
+This project uses automated release workflows with semantic versioning.
+
+### Production Releases
+
+Production releases are automated using [semantic-release](https://semantic-release.gitbook.io/semantic-release/) and follow [Conventional Commits](https://www.conventionalcommits.org/) for version bumping.
+
+**To trigger a production release:**
+
+1. Go to **Actions** → **Release** workflow
+2. Click **Run workflow**
+3. Select `main` branch
+4. Optionally enable **Dry run** to preview changes without publishing
+5. Click **Run workflow**
+
+**What happens:**
+- Analyzes commits since last release
+- Determines version bump (major/minor/patch) based on commit types
+- Updates `CHANGELOG.md` with release notes
+- Creates a git tag (e.g., `v1.2.3`)
+- Publishes to npm with `latest` tag
+- Creates a GitHub release
+
+### Dev/Nightly Releases
+
+For testing unreleased features, you can publish development versions with custom npm tags.
+
+**To trigger a dev release:**
+
+1. Go to **Actions** → **Dev Release** workflow
+2. Click **Run workflow**
+3. Configure:
+   - **Branch** - Which branch to publish from (main, dev, next)
+   - **NPM tag** - Distribution tag (dev, next, alpha, beta, nightly, canary)
+   - **Custom NPM tag** - Optional custom tag like `v4.1.x` (overrides selection above)
+   - **Version suffix** - Suffix for the version string (dev, nightly, alpha, etc.)
+4. Click **Run workflow**
+
+**What happens:**
+- Builds from the selected branch
+- Generates a version like `0.0.1-dev.20260109123456.abc1234`
+- Publishes to npm with the specified tag
+- Creates a git tag for reference
+
+**Example installations:**
+```bash
+# Install latest dev version
+npm install @stencil/vitest@dev
+
+# Install latest nightly version
+npm install @stencil/vitest@nightly
+
+# Install specific version tag
+npm install @stencil/vitest@v4.1.x
+```
+
+### Version Formats
+
+- **Production:** `1.2.3` (semantic versioning)
+- **Dev:** `1.2.3-dev.20260109123456.abc1234`
+- **Nightly:** `1.2.3-nightly.20260109123456`
+- **Alpha/Beta:** `1.2.3-alpha.20260109123456.abc1234`
+
+### Trusted Publishing
+
+This project uses npm's [provenance](https://docs.npmjs.com/generating-provenance-statements) feature for supply chain security. All releases must originate from the `.github/workflows/release.yml` trusted workflow.
+
 ## Code of Conduct
 
 This project follows the [Contributor Covenant Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).

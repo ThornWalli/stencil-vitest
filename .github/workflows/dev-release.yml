@@ -1,0 +1,54 @@
+name: Dev Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to release from'
+        required: true
+        default: 'main'
+        type: choice
+        options:
+          - main
+          - dev
+          - next
+      npm_tag:
+        description: 'NPM dist tag'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - next
+          - alpha
+          - beta
+          - canary
+          - nightly
+      custom_npm_tag:
+        description: 'Custom NPM tag (overrides selection above, e.g., v4.1.x)'
+        required: false
+        type: string
+      version_suffix:
+        description: 'Version suffix'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - nightly
+          - alpha
+          - beta
+          - canary
+          - next
+
+permissions: {}
+
+jobs:
+  trigger-release:
+    name: Trigger Dev Release
+    uses: ./.github/workflows/release.yml
+    with:
+      branch: ${{ inputs.branch }}
+      npm_tag: ${{ inputs.custom_npm_tag || inputs.npm_tag }}
+      version_suffix: ${{ inputs.version_suffix }}
+    secrets: inherit

@@ -1,45 +1,188 @@
 name: Release
 
 on:
-  push:
-    tags:
-      - v*
+  # Manual production release trigger
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no actual release)'
+        required: false
+        default: false
+        type: boolean
+
+  # Reusable workflow for dev/nightly releases
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch to release from'
+        required: true
+        type: string
+      npm_tag:
+        description: 'NPM dist tag (e.g., dev, next, alpha, beta, or version number)'
+        required: true
+        type: string
+      version_suffix:
+        description: 'Version suffix (e.g., dev, nightly, alpha)'
+        required: false
+        type: string
+        default: 'dev'
 
 # Remove default permissions of GITHUB_TOKEN for security
 # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
 permissions: {}
 
 jobs:
-  release:
+  # Production release job - runs semantic-release for automated versioning
+  production-release:
+    if: github.event_name == 'workflow_dispatch'
+    name: Production Release
     concurrency:
-      group: release
+      group: release-production
+      cancel-in-progress: false
     permissions:
       contents: write
+      issues: write
+      pull-requests: write
       id-token: write
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - name: 🔍 Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
         with:
           fetch-depth: 0
-      - run: corepack enable
-      - uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+          persist-credentials: false
+
+      - name: 🔧 Setup environment
+        run: corepack enable
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
         with:
           node-version: 24.10.0
           registry-url: 'https://registry.npmjs.org/'
           cache: 'pnpm'
 
-      - name: Update npm for trusted publishing
+      - name: 🔄 Update npm for trusted publishing
         run: npm install -g npm@11.6.0
 
-      - run: pnpm config set registry https://registry.npmjs.org
-      - run: npm config set registry https://registry.npmjs.org
+      - name: 🔧 Configure registries
+        run: |
+          pnpm config set registry https://registry.npmjs.org
+          npm config set registry https://registry.npmjs.org
 
       - name: 📦 Install dependencies
         run: pnpm install
 
-      - name: 🛠 Build
+      - name: 🛠 Build package
         run: pnpm build && pnpm install
 
-      - name: Run semantic-release
+      - name: 🧪 Run tests
+        run: pnpm test
+
+      - name: 🚀 Run semantic-release
+        if: ${{ !inputs.dry_run }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: pnpm release
+
+      - name: 🔍 Dry run semantic-release
+        if: ${{ inputs.dry_run }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm release --dry-run
+
+  # Dev/Nightly release job - manual versioning with custom npm tag
+  dev-release:
+    if: github.event_name == 'workflow_call'
+    name: Dev Release
+    concurrency:
+      group: release-dev-${{ inputs.npm_tag }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      id-token: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: 🔍 Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 0
+
+      - name: 🔧 Setup environment
+        run: corepack enable
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@395ad3262231945c25e8478fd5baf05154b1d79f # v6.1.0
+        with:
+          node-version: 24.10.0
+          registry-url: 'https://registry.npmjs.org/'
+          cache: 'pnpm'
+
+      - name: 🔄 Update npm for trusted publishing
+        run: npm install -g npm@11.6.0
+
+      - name: 🔧 Configure registries
+        run: |
+          pnpm config set registry https://registry.npmjs.org
+          npm config set registry https://registry.npmjs.org
+
+      - name: 📦 Install dependencies
+        run: pnpm install
+
+      - name: 🛠 Build package
+        run: pnpm build && pnpm install
+
+      - name: 🧪 Run tests
+        run: pnpm test
+
+      - name: 🏷️ Generate dev version
+        id: version
+        run: |
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          TIMESTAMP=$(date +%Y%m%d%H%M%S)
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          
+          # Generate version based on suffix
+          if [ "${{ inputs.version_suffix }}" = "nightly" ]; then
+            DEV_VERSION="${CURRENT_VERSION}-nightly.${TIMESTAMP}"
+          else
+            DEV_VERSION="${CURRENT_VERSION}-${{ inputs.version_suffix }}.${TIMESTAMP}.${COMMIT_SHA}"
+          fi
+          
+          echo "version=${DEV_VERSION}" >> $GITHUB_OUTPUT
+          echo "📦 Publishing version: ${DEV_VERSION} with tag: ${{ inputs.npm_tag }}"
+
+      - name: 📝 Update package.json version
+        run: |
+          npm version ${{ steps.version.outputs.version }} --no-git-tag-version
+
+      - name: 🚀 Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish --tag ${{ inputs.npm_tag }} --access public --provenance
+
+      - name: 🏷️ Create git tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "v${{ steps.version.outputs.version }}" -m "Release v${{ steps.version.outputs.version }}"
+          git push origin "v${{ steps.version.outputs.version }}"
+
+      - name: ✅ Summary
+        run: |
+          echo "## 🎉 Dev Release Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** \`${{ steps.version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **NPM Tag:** \`${{ inputs.npm_tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ inputs.branch }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Install with:" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+          echo "npm install @stencil/vitest@${{ inputs.npm_tag }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
