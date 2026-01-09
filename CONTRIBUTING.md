@@ -77,6 +77,7 @@ Production releases are automated using [semantic-release](https://semantic-rele
 6. Click **Run workflow**
 
 **What happens:**
+
 - Analyzes commits since last release
 - Determines version bump (major/minor/patch) based on commit types
 - Updates `CHANGELOG.md` with release notes
@@ -100,12 +101,14 @@ For testing unreleased features, you can publish development versions with custo
 6. Click **Run workflow**
 
 **What happens:**
+
 - Builds from the selected branch
 - Generates a version like `0.0.1-dev.20260109123456.abc1234`
 - Publishes to npm with the specified tag
 - Creates a git tag for reference
 
 **Example installations:**
+
 ```bash
 # Install latest dev version
 npm install @stencil/vitest@dev
