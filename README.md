@@ -120,7 +120,6 @@ describe('my-button', () => {
 
 ```json
 // package.json
-
 {
   "scripts": {
     "test": "stencil-test",
