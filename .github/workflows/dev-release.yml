@@ -20,7 +20,9 @@ on:
         required: false
         type: string
 
-permissions: {}
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   trigger-release:
