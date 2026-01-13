@@ -3,6 +3,18 @@
  * Used by both matchers and snapshot serializers
  */
 
+/**
+ * Stencil non-shadow component with slot polyfill
+ * For scoped components, Stencil monkey-patches DOM accessors and moves
+ * the original accessors to __childNodes, __children, etc.
+ */
+interface StencilNonShadowElement extends HTMLElement {
+  __childNodes?: NodeList;
+  __children?: HTMLCollection;
+  __firstChild?: ChildNode | null;
+  __lastChild?: ChildNode | null;
+}
+
 export interface SerializeOptions {
   /** Whether to include shadow DOM in serialization */
   serializeShadowRoot?: boolean;
@@ -76,7 +88,12 @@ function serializeElementWithShadow(
   html += '>';
 
   // Add shadow DOM if present and requested
-  if (serializeShadowRoot && 'shadowRoot' in elem && elem.shadowRoot) {
+  // Also check for Stencil non-shadow components with __childNodes (slot polyfill)
+  const stencilElem = elem as StencilNonShadowElement;
+  const hasShadowRoot = serializeShadowRoot && 'shadowRoot' in elem && elem.shadowRoot;
+  const hasStencilPolyfill = serializeShadowRoot && '__childNodes' in stencilElem && stencilElem.__childNodes;
+
+  if (hasShadowRoot) {
     // Use mock:shadow-root format to match mock-doc's output
     html += '<mock:shadow-root>';
 
@@ -101,7 +118,15 @@ function serializeElementWithShadow(
   }
 
   // Add light DOM children
-  const children = Array.from(elem.childNodes);
+  // For Stencil non-shadow components with slot polyfill, use __childNodes to access actual DOM
+  let childNodes: NodeList;
+  if (hasStencilPolyfill) {
+    childNodes = stencilElem.__childNodes!;
+  } else {
+    childNodes = elem.childNodes;
+  }
+
+  const children = Array.from(childNodes);
   for (const child of children) {
     if ((child as any).nodeType === 1) {
       // Element node
