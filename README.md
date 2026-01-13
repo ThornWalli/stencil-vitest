@@ -240,6 +240,38 @@ await expect(root).toMatchScreenshot();
 
 Refer to Vitest's [screenshot testing documentation](https://vitest.dev/guide/snapshot.html#visual-snapshots) for more details.
 
+## Utils
+
+### `serializeHtml(element, options?)`
+
+Serializes an HTML element to a string, including shadow DOM content. Useful for debugging or creating custom assertions.
+
+```tsx
+import { serializeHtml } from '@stencil/vitest';
+
+const html = serializeHtml(element, {
+  serializeShadowRoot: true, // Include shadow DOM (default: true)
+  pretty: true, // Prettify output (default: true)
+  excludeStyles: true, // Exclude <style> tags (default: true)
+});
+```
+
+### `prettifyHtml(html)`
+
+Formats HTML string with indentation for readability.
+
+```tsx
+import { prettifyHtml } from '@stencil/vitest';
+
+const formatted = prettifyHtml('<div><span>Hello</span></div>');
+// Returns:
+// <div>
+//   <span>
+//     Hello
+//   </span>
+// </div>
+```
+
 ## CLI
 
 The `stencil-test` CLI wraps both Stencil builds with Vitest testing.
