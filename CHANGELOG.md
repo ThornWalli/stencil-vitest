@@ -1,3 +1,16 @@
+# [1.1.0](https://github.com/stenciljs/vitest/compare/v1.0.0...v1.1.0) (2026-01-13)
+
+
+### Bug Fixes
+
+* package.json workspace references ([4cec091](https://github.com/stenciljs/vitest/commit/4cec091d29c57749d054961a211a156ae8266faf))
+
+
+### Features
+
+* expose serializeHtml and prettifyHtml ([c2772a1](https://github.com/stenciljs/vitest/commit/c2772a1878844007468dc3c5d99d8c049064221e))
+* serialize non-shadow, polyfilled components ([5621f34](https://github.com/stenciljs/vitest/commit/5621f3485cfcf2eb677b784cdf29838a15b9ba78))
+
 # [1.0.0](https://github.com/stenciljs/vitest/compare/v0.1.0...v1.0.0) (2026-01-10)
 
 
