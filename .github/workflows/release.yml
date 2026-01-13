@@ -88,11 +88,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm release
 
-      - name: 🚀 Publish vitest-environment-stencil
-        if: ${{ !inputs.dry_run }}
-        working-directory: packages/vitest-environment-stencil
-        run: npm publish --access public --provenance
-
       - name: Dry run semantic-release
         if: ${{ inputs.dry_run }}
         env:
@@ -168,9 +163,9 @@ jobs:
 
       - name: 🚀 Publish to npm
         run: |
-          npm publish --tag ${{ steps.version.outputs.npm_tag }} --access public --provenance
+          pnpm publish --tag ${{ steps.version.outputs.npm_tag }} --access public --provenance --no-git-checks
           cd packages/vitest-environment-stencil
-          npm publish --tag ${{ steps.version.outputs.npm_tag }} --access public --provenance
+          pnpm publish --tag ${{ steps.version.outputs.npm_tag }} --access public --provenance --no-git-checks
 
       - name: 🏷️ Create git tag
         run: |
