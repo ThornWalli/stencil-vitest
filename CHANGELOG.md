@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/stenciljs/vitest/compare/v1.1.0...v1.1.1) (2026-01-17)
+
+
+### Bug Fixes
+
+* matchers typing and add more docs / examples ([612a5d2](https://github.com/stenciljs/vitest/commit/612a5d222dead24246ef91656cc7cc200b22ad6d))
+
 # [1.1.0](https://github.com/stenciljs/vitest/compare/v1.0.0...v1.1.0) (2026-01-13)
 
 
