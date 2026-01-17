@@ -12,34 +12,50 @@ import type { EventSpy } from '../types.js';
  * Custom matchers interface
  */
 interface CustomMatchers<R = unknown> {
+  /** Asserts element has the specified CSS class. */
   toHaveClass(className: string): R;
+  /** Asserts element has all specified CSS classes. */
   toHaveClasses(classNames: string[]): R;
+  /** Asserts element has exactly the specified CSS classes (no more, no less). */
   toMatchClasses(classNames: string[]): R;
+  /** Asserts element has the attribute, optionally with a specific value. */
   toHaveAttribute(attribute: string, value?: string): R;
+  /** Asserts element attribute equals the expected value exactly. */
   toEqualAttribute(attribute: string, value: string): R;
+  /** Asserts element has all specified attributes with exact values. */
   toEqualAttributes(expectedAttrs: Record<string, string>): R;
+  /** Asserts element has the property, optionally with a specific value. */
   toHaveProperty(property: string, value?: any): R;
+  /** Asserts element's text content contains the specified text. */
   toHaveTextContent(text: string): R;
+  /** Asserts element's trimmed text content equals the expected text exactly. */
   toEqualText(expectedText: string): R;
-  toBeVisible(): R;
+  /** Asserts element has an attached shadow root. */
   toHaveShadowRoot(): R;
+  /** Asserts element will emit the specified event when interacted with. */
   toEmitEvent(eventName: string): R;
+  /** Asserts element's serialized HTML (including shadow DOM) matches expected HTML. */
   toEqualHtml(expectedHtml: string): R;
+  /** Asserts element's light DOM HTML (excluding shadow DOM internals) matches expected HTML. */
   toEqualLightHtml(expectedHtml: string): R;
+  /** Asserts event spy has received at least one event. */
   toHaveReceivedEvent(): R;
+  /** Asserts event spy has received exactly the specified number of events. */
   toHaveReceivedEventTimes(count: number): R;
+  /** Asserts event spy's last received event has the expected detail. */
   toHaveReceivedEventDetail(detail: any): R;
+  /** Asserts event spy's first received event has the expected detail. */
   toHaveFirstReceivedEventDetail(detail: any): R;
+  /** Asserts event spy's last received event has the expected detail. */
   toHaveLastReceivedEventDetail(detail: any): R;
+  /** Asserts event spy's nth received event (0-indexed) has the expected detail. */
   toHaveNthReceivedEventDetail(index: number, detail: any): R;
 }
 
-// Extend Vitest types if available
-declare global {
-  namespace Vi {
-    interface Assertion<T = any> extends CustomMatchers<T> {}
-    interface AsymmetricMatchersContaining extends CustomMatchers {}
-  }
+// Extend Vitest types
+declare module 'vitest' {
+  interface Assertion<T = any> extends CustomMatchers<T> {}
+  interface AsymmetricMatchersContaining extends CustomMatchers {}
 }
 
 /**

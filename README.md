@@ -161,8 +161,8 @@ unmount();
 ```typescript
 // DOM assertions
 expect(element).toHaveClass('active');
-expect(element).toHaveClasses(['active', 'primary']);
-expect(element).toMatchClasses(['active']); // Partial match
+expect(element).toHaveClasses(['active', 'primary']); // Contains all / partial match
+expect(element).toMatchClasses(['active']); // Exact match
 expect(element).toHaveAttribute('aria-label', 'Close');
 expect(element).toEqualAttribute('type', 'button');
 expect(element).toEqualAttributes({ type: 'button', disabled: true });

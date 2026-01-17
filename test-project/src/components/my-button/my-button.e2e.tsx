@@ -19,7 +19,7 @@ describe('my-button - browser tests', () => {
       const { root } = await render(<my-button variant="primary">Primary Button</my-button>);
 
       // Check shadow root exists
-      expect(root.shadowRoot).toBeTruthy();
+      expect(root).toHaveShadowRoot();
 
       // Check shadow DOM content
       const shadowButton = root.shadowRoot?.querySelector('button');
@@ -148,5 +148,14 @@ describe('my-button - browser tests', () => {
       expect(spy).toHaveReceivedEvent();
       expect(spy).toHaveReceivedEventTimes(2);
     });
+  });
+
+  // test https://vitest.dev/api/browser/assertions.html#tobevisible
+  it('should be visible when rendered', async () => {
+    console.log('??');
+    const { root } = await render(<my-button>Visible Button</my-button>);
+    // root.style.display = 'none';
+
+    await expect(root).toBeVisible();
   });
 });

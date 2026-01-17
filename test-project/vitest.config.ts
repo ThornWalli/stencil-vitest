@@ -1,5 +1,6 @@
 import { defineVitestConfig } from '@stencil/vitest/config';
 import { playwright } from '@vitest/browser-playwright';
+import path from 'node:path';
 
 export default defineVitestConfig({
   stencilConfig: './stencil.config.ts',
@@ -33,6 +34,19 @@ export default defineVitestConfig({
           include: ['**/*-happy.spec.{ts,tsx}', '**/*.happy.spec.{ts,tsx}'],
           environment: 'happy-dom',
           setupFiles: ['./vitest-setup.ts'],
+        },
+      },
+      {
+        // Node-only unit tests (no DOM environment)
+        resolve: {
+          alias: {
+            '@utils': path.resolve(__dirname, 'src/utils'),
+          },
+        },
+        test: {
+          name: 'node',
+          environment: 'node',
+          include: ['**/*.unit.ts'],
         },
       },
       {
