@@ -1,3 +1,11 @@
+## [1.1.2](https://github.com/stenciljs/vitest/compare/v1.1.1...v1.1.2) (2026-01-20)
+
+
+### Bug Fixes
+
+* config to auto load / find `vitest-environment-stencil` ([7692065](https://github.com/stenciljs/vitest/commit/7692065afdede66d913a7ebb0c104172d849d309))
+* remove `toBeVisible` in favour of the browser locator from vitest ([875d319](https://github.com/stenciljs/vitest/commit/875d319719b2fb3c3349c08cb5d9432cf0a832ae))
+
 ## [1.1.1](https://github.com/stenciljs/vitest/compare/v1.1.0...v1.1.1) (2026-01-17)
 
 
