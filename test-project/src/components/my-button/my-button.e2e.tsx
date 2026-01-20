@@ -152,10 +152,9 @@ describe('my-button - browser tests', () => {
 
   // test https://vitest.dev/api/browser/assertions.html#tobevisible
   it('should be visible when rendered', async () => {
-    console.log('??');
     const { root } = await render(<my-button>Visible Button</my-button>);
     // root.style.display = 'none';
 
-    await expect(root).toBeVisible();
+    await expect.element(root).toBeVisible();
   });
 });

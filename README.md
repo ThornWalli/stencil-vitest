@@ -169,7 +169,6 @@ expect(element).toEqualAttributes({ type: 'button', disabled: true });
 expect(element).toHaveProperty('value', 'test');
 expect(element).toHaveTextContent('Hello World');
 expect(element).toEqualText('Exact text match');
-expect(element).toBeVisible();
 
 // Shadow DOM
 expect(element).toHaveShadowRoot();

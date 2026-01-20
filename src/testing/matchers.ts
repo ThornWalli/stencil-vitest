@@ -278,19 +278,6 @@ export function toEqualText(received: HTMLElement, expectedText: string): { pass
 }
 
 /**
- * Check if element is visible
- */
-export function toBeVisible(received: HTMLElement): { pass: boolean; message: () => string } {
-  const style = window.getComputedStyle(received);
-  const pass = style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
-
-  return {
-    pass,
-    message: () => (pass ? `Expected element not to be visible` : `Expected element to be visible`),
-  };
-}
-
-/**
  * Check if element has shadow root
  */
 export function toHaveShadowRoot(received: HTMLElement): { pass: boolean; message: () => string } {
@@ -361,12 +348,6 @@ export function toEqualHtml(
   let expectedHtml = normalizeHtml(expected.trim());
   receivedHtml = normalizeHtml(receivedHtml);
 
-  // Debug logging
-  if (expectedHtml !== receivedHtml) {
-    console.log('Expected (normalized):', JSON.stringify(expectedHtml));
-    console.log('Received (normalized):', JSON.stringify(receivedHtml));
-  }
-
   const pass = receivedHtml === expectedHtml;
 
   return {
@@ -413,12 +394,6 @@ export function toEqualLightHtml(
   // to preserve custom elements like <mock:shadow-root>
   let expectedHtml = normalizeHtml(expected.trim());
   receivedHtml = normalizeHtml(receivedHtml);
-
-  // Debug logging
-  if (expectedHtml !== receivedHtml) {
-    console.log('LightDOM Expected (normalized):', JSON.stringify(expectedHtml));
-    console.log('LightDOM Received (normalized):', JSON.stringify(receivedHtml));
-  }
 
   const pass = receivedHtml === expectedHtml;
 
@@ -602,7 +577,6 @@ export function installMatchers() {
     toHaveProperty,
     toHaveTextContent,
     toEqualText,
-    toBeVisible,
     toHaveShadowRoot,
     toEqualHtml,
     toEqualLightHtml,
