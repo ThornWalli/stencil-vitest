@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { defineConfig, type ViteUserConfig } from 'vitest/config';
 import {
   loadStencilConfig,
@@ -6,6 +7,12 @@ import {
   getStencilResolveAliases,
 } from './setup/config-loader.js';
 import type { Config as StencilConfig } from '@stencil/core/internal';
+
+// Resolve the path to the stencil environment module at config load time
+// This is necessary for pnpm which doesn't hoist transitive dependencies
+const stencilEnvironmentPath = fileURLToPath(
+  import.meta.resolve('@stencil/vitest/environments/stencil'),
+);
 
 /**
  * Define a Vitest configuration for Stencil component testing
@@ -150,11 +157,22 @@ function applyStencilDefaults(config: ViteUserConfig, stencilConfig?: StencilCon
   if (!result.resolve) {
     result.resolve = {};
   }
+
+  // Always add alias for vitest-environment-stencil to resolve from this package
+  // This is necessary for pnpm which doesn't hoist transitive dependencies
+  const environmentAlias = {
+    'vitest-environment-stencil': stencilEnvironmentPath,
+  };
+
   if (!result.resolve.alias) {
-    result.resolve.alias = getStencilResolveAliases(stencilConfig);
+    result.resolve.alias = {
+      ...environmentAlias,
+      ...getStencilResolveAliases(stencilConfig),
+    };
   } else if (typeof result.resolve.alias === 'object' && !Array.isArray(result.resolve.alias)) {
     // Merge with existing aliases, user's aliases take precedence
     result.resolve.alias = {
+      ...environmentAlias,
       ...getStencilResolveAliases(stencilConfig),
       ...result.resolve.alias,
     };
@@ -272,6 +290,12 @@ function applyStencilDefaults(config: ViteUserConfig, stencilConfig?: StencilCon
 function enhanceTestConfig(testConfig: any, stencilConfig?: StencilConfig): any {
   const enhanced = { ...testConfig };
 
+  // Rewrite 'stencil' environment to use the actual path
+  // This is necessary for pnpm which doesn't hoist transitive dependencies
+  if (enhanced.environment?.toLowerCase() === 'stencil') {
+    enhanced.environment = stencilEnvironmentPath;
+  }
+
   // Get output directories from Stencil config
   const outputDirs = getStencilOutputDirs(stencilConfig);
   const defaultExcludes = ['**/node_modules/**', ...outputDirs.map((dir) => `**/${dir}/**`)];
@@ -332,10 +356,16 @@ function enhanceProject(project: any, stencilConfig?: StencilConfig): any {
       ];
     }
 
+    // Rewrite 'stencil' environment to use the actual path
+    // This is necessary for pnpm which doesn't hoist transitive dependencies
+    const environment = enhanced.test.environment?.toLowerCase();
+    if (environment === 'stencil') {
+      enhanced.test.environment = stencilEnvironmentPath;
+    }
+
     // Auto-inject setup files based on environment
     const setupFiles = enhanced.test.setupFiles || [];
     const setupFilesArray = Array.isArray(setupFiles) ? setupFiles : [setupFiles];
-    const environment = enhanced.test.environment?.toLowerCase();
 
     // Auto-inject setup files based on environment type
     // This provides automatic polyfills based on the environment being used
