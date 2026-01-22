@@ -6,3 +6,5 @@ dist/
 coverage/
 .vitest/
 .vitest-attachments/
+.claude/
+.stencil/
