@@ -8,10 +8,10 @@ Reproductions help us identify the source of the problem and verify that the iss
 
 Please use our starter template to create a minimal reproduction:
 
-| Template | Link |
-|----------|------|
+| Template    | Link                                                                                         |
+| ----------- | -------------------------------------------------------------------------------------------- |
 | CodeSandbox | [stencil-starter-vitest](https://codesandbox.io/p/github/johnjenkins/stencil-starter-vitest) |
-| GitHub | [stencil-starter-vitest](https://github.com/johnjenkins/stencil-starter-vitest) |
+| GitHub      | [stencil-starter-vitest](https://github.com/johnjenkins/stencil-starter-vitest)              |
 
 > **Note:** Browser tests will not work in a CodeSandbox container. If your issue relates to browser testing, please fork the GitHub repo and run locally.
 
@@ -26,5 +26,6 @@ A reproduction should be **as minimal as possible** - remove any code not direct
 ---
 
 **Resources:**
+
 - [How to create a Minimal, Reproducible Example](https://stackoverflow.com/help/minimal-reproducible-example)
 - [The Importance of Reproductions](https://antfu.me/posts/why-reproductions-are-required)
