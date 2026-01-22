@@ -1,3 +1,11 @@
+## [1.1.3](https://github.com/stenciljs/vitest/compare/v1.1.2...v1.1.3) (2026-01-22)
+
+
+### Bug Fixes
+
+* return class instance when possible ([bfc68d1](https://github.com/stenciljs/vitest/commit/bfc68d194ce01b6b229b23f672ee52175b3103f2))
+* vitest module augmentation order ([c36472d](https://github.com/stenciljs/vitest/commit/c36472dabd25aa522f6841bc1221ef7d40e1de81))
+
 ## [1.1.2](https://github.com/stenciljs/vitest/compare/v1.1.1...v1.1.2) (2026-01-20)
 
 
