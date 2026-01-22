@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/stenciljs/vitest/compare/v1.1.3...v1.1.4) (2026-01-22)
+
+
+### Bug Fixes
+
+* auto-find vitest-environment-stencil ([41f8f4a](https://github.com/stenciljs/vitest/commit/41f8f4aad9e3d98ee6031eface24add2a33a3111))
+
 ## [1.1.3](https://github.com/stenciljs/vitest/compare/v1.1.2...v1.1.3) (2026-01-22)
 
 
