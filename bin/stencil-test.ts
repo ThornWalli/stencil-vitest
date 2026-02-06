@@ -674,9 +674,13 @@ process.on('SIGTERM', () => cleanup());
     }
 
     // In one-time build mode, stencil exits after build
-    // Don't cleanup immediately - let tests finish first
+    // If build failed, exit with the failure code
     if (!args.watch) {
       stencilProcess = null;
+      if (code !== 0) {
+        log(`Stencil build failed with code ${code}`);
+        cleanup(code || 1);
+      }
     } else {
       // In watch mode, stencil shouldn't exit - if it does, something went wrong
       log(`Stencil exited unexpectedly with code ${code}`);
